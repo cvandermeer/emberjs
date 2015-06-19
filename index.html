@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Ember Test</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	</head>
+	<body>
+		<script type="text/x-handlebars">
+			<div class="container">
+				<nav class="navbar navbar-default">
+					<a class="navbar-brand" href="#">Ember Test</a>
+					<ul class="nav navbar-nav">
+						<li>{{#link-to 'posts'}}Home{{/link-to}}</li>
+						<li>{{#link-to 'about'}}About{{/link-to}}</li>
+					</ul>
+				</nav>
+				<div class="row">{{outlet}}</div>
+			</div>
+		</script>
+
+		<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+		<script src="http://builds.emberjs.com/beta/ember-template-compiler.js"></script>
+		<script src="http://builds.emberjs.com/beta/ember.debug.js"></script>
+
+		<script type="text/x-handlebars" id="posts">
+			<div class="overview col-md-3">
+				<h2>Nieuws</h2>
+				<ul>
+					{{#each post in model}}
+						<li>
+							{{#link-to 'post' post}}
+								{{post.title}}
+							{{/link-to}}
+						</li>
+					{{/each}}
+				</ul>
+			</div>
+			<div class="post col-md-9">{{outlet}}</div>
+		</script> 
+
+		<script type="text/x-handlebars" id="post">
+			<h2>{{title}}</h2>
+			<p>{{body}}</p>
+		</script>
+
+		<script type="text/x-handlebars" id="about">
+			<h2>Over ons!</h2>
+		</script>
+
+		<script type="text/javascript">
+			window.App = Ember.Application.create();
+
+			App.Router.map(function(){
+				this.resource('posts', function(){
+					this.resource('post', { path: ':post_id'});;
+				});
+				this.route('about');
+			})
+
+			var posts = [
+				{
+					id: 1,
+					title: "Dit is item 1",
+					body: "bal blab bla"
+				},
+				{
+					id: 2,
+					title: "Dit is item 2",
+					body: "bla blac bla"
+				}
+			]
+
+			App.PostsRoute = Ember.Route.extend({
+				model: function() {
+					return posts;
+				}
+			})
+		</script>
+	</body>
+</html>
